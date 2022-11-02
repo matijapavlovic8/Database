@@ -28,8 +28,8 @@ public class StudentDatabase {
 
     public StudentDatabase(List<String> records){
         if(records == null) throw new NullPointerException("Input can't be empty");
-        records = new ArrayList<>();
-        index = new HashMap<>();
+        this.records = new ArrayList<>();
+        this.index = new HashMap<>();
         createRecordsAndIndex(records);
 
     }
@@ -46,7 +46,9 @@ public class StudentDatabase {
             String[] splits = s.split("\\t");
             if(splits.length != 4) throw new IllegalArgumentException("Invalid input!");
             StudentRecord sr = new StudentRecord(splits[0], splits[1], splits[2], Integer.parseInt(splits[3]));
-            if(index.put(sr.getJmbag(), sr) != null) throw new IllegalArgumentException("Database already contains this JMBAG!");
+            this.records.add(sr);
+            if(index.containsKey(sr.getJmbag())) throw new IllegalArgumentException("Database already contains this JMBAG!");
+            index.put(sr.getJmbag(), sr);
             if(sr.getFinalGrade() < 1 || sr.getFinalGrade() > 5) throw new IllegalArgumentException("Invalid final grade!");
         }
     }
@@ -76,7 +78,9 @@ public class StudentDatabase {
         return temp;
     }
 
-
+    public boolean isEmpty(){
+        return records.isEmpty();
+    }
 
 
 }

@@ -25,7 +25,7 @@ public class StudentRecord {
     public StudentRecord(String jmbag, String lastName, String firstName, int finalGrade) {
         this.jmbag = Objects.requireNonNull(jmbag, "JMBAG can't be null!");
         this.lastName = Objects.requireNonNull(lastName, "Last name can't be null!");
-        this.firstName = Objects.requireNonNull(lastName, "Last name can't be null!");
+        this.firstName = Objects.requireNonNull(firstName, "Last name can't be null!");
         this.finalGrade = finalGrade;
     }
 

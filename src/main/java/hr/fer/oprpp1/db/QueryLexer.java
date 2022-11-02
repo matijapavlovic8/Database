@@ -1,5 +1,7 @@
 package hr.fer.oprpp1.db;
 
+import java.util.Arrays;
+
 /**
  * Implementation of a lexer used for lexical analysis of database queries.
  *
@@ -33,14 +35,14 @@ public class QueryLexer {
     }
 
     public QueryToken nextToken(){
-        if(token.getType() == QueryTokenType.EOF)
+        if(token != null && token.getType() == QueryTokenType.EOF)
             throw new UnsupportedOperationException("Can't create tokens after EOF");
-        skipWhitespace();
-        if(checkEOF())
+        if(checkEOF()) {
             token = processEOF();
+            return token;
+        }
         skipWhitespace();
-        token = createToken();
-        return token;
+        return createToken();
     }
 
 
@@ -101,13 +103,9 @@ public class QueryLexer {
      */
 
     private boolean checkLike(){
-        StringBuilder s = new StringBuilder();
-        for(int i = 0; i < 4; i++){
-            s.append(query[index + i]);
-        }
-        if(query[index + 4] != ' ' || query[index + 4] != '\t' || query[index + 4] != '\n' || query[index + 4] != '\r')
+        if((index + 5) >= query.length)
             return false;
-        return s.toString().equalsIgnoreCase("like");
+        return String.valueOf(query).substring(index, index + 5).equalsIgnoreCase("like ");
     }
 
     /**
@@ -115,13 +113,9 @@ public class QueryLexer {
      * @return {@code true} if AND operator is present and {@code false} otherwise.
      */
     private boolean checkAnd(){
-        StringBuilder s = new StringBuilder();
-        for(int i = 0; i < 3; i++){
-            s.append(query[index + i]);
-        }
-        if(query[index + 3] != ' ' || query[index + 3] != '\t' || query[index + 3] != '\n' || query[index + 3] != '\r')
+        if((index + 4) >= query.length)
             return false;
-        return s.toString().equalsIgnoreCase("and");
+        return String.valueOf(query).substring(index, index + 4).equalsIgnoreCase("and ");
     }
 
     /**
@@ -199,7 +193,7 @@ public class QueryLexer {
             return new QueryToken(QueryTokenType.FIRST_NAME, sb.toString());
         if(sb.toString().equalsIgnoreCase("lastname"))
             return new QueryToken(QueryTokenType.LAST_NAME, sb.toString());
-        throw new IllegalArgumentException("Illegal field value!");
+        throw new IllegalArgumentException("Illegal field value!" + sb.toString());
 
     }
 
