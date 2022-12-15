@@ -1,2 +1,2 @@
-# OPRPP1-HW04
-4th homework for OPRPP1
+# Database
+Simple database implementation in Java.
